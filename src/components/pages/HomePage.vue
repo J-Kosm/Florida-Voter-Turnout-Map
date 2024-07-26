@@ -22,6 +22,6 @@ export default {
 
 <style scoped>
 #content {
-    height: 550px;
+    
 }
 </style>

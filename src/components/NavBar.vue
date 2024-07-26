@@ -40,7 +40,8 @@ export default {
     },
     methods: {
         onNavButtonClicked(i) {
-            this.$router.push(i)
+            console.log("Path: " + i)
+            window.location.hash = i
         }
     }
 }

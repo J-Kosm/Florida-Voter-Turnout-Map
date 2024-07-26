@@ -1,6 +1,7 @@
 <template>
 <div id="map-container">
     <div id='map'></div>
+    <div id="legend" class="map-overlay"></div>
 </div>
 </template>
 
@@ -12,6 +13,7 @@ import geoData from '@/data/map_data.json'
 export default {
     data() {
         return {
+            map: null,
             mapOptions: {
                 zoomControl: false,
                 dragging: false,
@@ -37,6 +39,7 @@ export default {
     mounted() {
         this.init()
     },
+    
 
     methods: {
         init() {
@@ -46,8 +49,8 @@ export default {
             ).fitBounds(this.mapBounds)
             this.baseMaps["% Turnout"].addTo(map)
             
-            let control = L.control.layers(this.baseMaps, null, {collapsed: false, position: 'bottomright'})
-            control.addTo(map)
+            L.control.layers(this.baseMaps, null, {collapsed: false, position: 'bottomright'}).addTo(map)
+
         },
         sharedLayerOpts(func) {
             return {
@@ -76,15 +79,13 @@ export default {
 
 <style scoped>
 #map-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    
 }
 
 #map {
-    height: 100%;
+
+    height: 450px;
     background-color: rgb(184,228,244);
-    z-index: 0;
 }
 
 </style>
