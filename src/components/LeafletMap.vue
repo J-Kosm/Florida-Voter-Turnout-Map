@@ -9,6 +9,8 @@
 import L from 'leaflet'
 import 'leaflet-choropleth'
 import geoData from '@/data/map_data.json'
+import { useUIStore } from '@/stores/UI';
+import { mapStores } from 'pinia';
 
 export default {
     data() {
@@ -36,10 +38,12 @@ export default {
             }
         }
     },
+    computed: {
+        ...mapStores(useUIStore)
+    },
     mounted() {
         this.init()
     },
-    
 
     methods: {
         init() {
@@ -49,8 +53,16 @@ export default {
             ).fitBounds(this.mapBounds)
             this.baseMaps["% Turnout"].addTo(map)
             
-            L.control.layers(this.baseMaps, null, {collapsed: false, position: 'bottomright'}).addTo(map)
+            L.control.layers(this.baseMaps, null, {collapsed: false, position: 'topright'}).addTo(map)
 
+            map.on('baselayerchange', this.onLayerChange)
+
+            this.UIStore.map = map
+            this.UIStore.geoJSONLayer = this.baseMaps["% Turnout"]
+
+        },
+        onLayerChange(e) {
+            this.UIStore.geoJSONLayer = e.layer
         },
         sharedLayerOpts(func) {
             return {
@@ -67,7 +79,8 @@ export default {
                     layer.on(
                         'click',
                         () => {
-                            console.log("Clicked")
+                            this.UIStore.updateStyle(layer)
+                            this.UIStore.county = layer
                         }
                     )
                 }
@@ -79,13 +92,14 @@ export default {
 
 <style scoped>
 #map-container {
-    
+    flex-basis: 500px;
+    min-height: 425px;
 }
 
 #map {
-
-    height: 450px;
+    height: 100%;
     background-color: rgb(184,228,244);
+    z-index: 0;
 }
 
 </style>

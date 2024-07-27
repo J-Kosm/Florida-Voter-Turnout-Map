@@ -41,7 +41,7 @@ export default {
     methods: {
         onNavButtonClicked(i) {
             console.log("Path: " + i)
-            window.location.hash = i
+            this.$router.push(i)
         }
     }
 }
