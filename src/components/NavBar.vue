@@ -40,6 +40,7 @@ export default {
     },
     methods: {
         onNavButtonClicked(i) {
+            console.log("Path: " + i)
             this.$router.push(i)
         }
     }
