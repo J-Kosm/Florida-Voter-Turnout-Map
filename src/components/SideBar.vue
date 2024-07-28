@@ -1,5 +1,5 @@
 <template>
-<div class="side-bar">
+<div class="side-bar" v-if="UIStore.county === null">
     <div class="sidebar-title">
         <h1>
             Click on the map or use the dropdown menu to view county statistics!
@@ -7,6 +7,7 @@
         <select
             name="" 
             id="county-select"
+            @change="onMenuItemClicked"
         >
             <option value=""> Select a county </option>
             <option v-for="c in UIStore.countyNames" :key="c" :value="c">{{ c }}</option>
@@ -18,6 +19,27 @@
         </p>
     </div>
 </div>
+<div class="side-bar" v-else>
+    <div class="sidebar-title">
+        <h1>
+            {{ UIStore.countyName }} County
+        </h1>
+        <select
+            name="" 
+            id="county-select"
+            @change="onMenuItemClicked"
+        >
+            <option value="">{{ UIStore.countyName }}</option>
+            <option v-for="c in UIStore.countyNames" :key="c" :value="c">{{ c }}</option>
+        </select>
+        <br>
+        <p>
+            Not registered to vote yet?
+            <a href="https://registertovoteflorida.gov/home">Click here!</a>
+        </p>
+    </div>
+
+</div>
 </template>
 
 <script>
@@ -27,18 +49,40 @@ import { useUIStore } from '@/stores/UI';
 export default {
     data() {
         return {
-
         }
     },
+    
     computed: {
         ...mapStores(useUIStore)
     },
-    methods: {
+    watch: {
         
     },
     mounted() {
         console.log("Mounted: SideBar")
-    }
+        // this.UIStore.initSideBar()
+        if (this.UIStore.countyNames) {
+            return
+        }
+
+        let x = []
+        this.UIStore.geoJSONLayer.eachLayer(function (layer) {
+            x.push(layer.feature.properties.county)
+        })
+        this.UIStore.countyNames = x
+    },
+    methods: {
+        onMenuItemClicked(e) {
+            this.UIStore.geoJSONLayer.eachLayer(item => {
+                if (e.target.value == item.feature.properties.county) {
+                    this.UIStore.updateCounty(item)
+                }
+            })
+        },
+        generateTable() {
+
+        }
+    },
 }
 </script>
 

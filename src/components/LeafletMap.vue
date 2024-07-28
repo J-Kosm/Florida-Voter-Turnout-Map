@@ -6,16 +6,13 @@
 </template>
 
 <script>
-import L from 'leaflet'
-import 'leaflet-choropleth'
-import geoData from '@/data/map_data.json'
 import { useUIStore } from '@/stores/UI';
 import { mapStores } from 'pinia';
+import L from 'leaflet'
 
 export default {
     data() {
         return {
-            map: null,
             mapOptions: {
                 zoomControl: false,
                 dragging: false,
@@ -27,15 +24,7 @@ export default {
             mapBounds: [
                 [31.083518,-87.696912],
                 [24.409639,-79.937745]
-            ],
-            baseMaps: {
-                "% Turnout": L.choropleth(geoData, this.sharedLayerOpts((feature) => {
-                    return ( feature.properties.turnout / feature.properties.voterReg) * 100
-                })),
-                "Total Population": L.choropleth(geoData, this.sharedLayerOpts((feature) => {
-                    return feature.properties.totalPop
-                }))
-            }
+            ]
         }
     },
     computed: {
@@ -52,42 +41,19 @@ export default {
                 'map',
                 this.mapOptions
             ).fitBounds(this.mapBounds)
-            this.baseMaps["% Turnout"].addTo(map)
+            this.UIStore.updateBaseMaps()
+            this.UIStore.baseMaps["% Turnout"].addTo(map)
+
+            L.control.layers(this.UIStore.baseMaps, null, {collapsed: false, position: 'topright'}).addTo(map)
             
-            L.control.layers(this.baseMaps, null, {collapsed: false, position: 'topright'}).addTo(map)
+            map.on('baselayerchange', this.onBaseLayerChange)
 
-            map.on('baselayerchange', this.onLayerChange)
-
-            this.UIStore.map = map
-            this.UIStore.geoJSONLayer = this.baseMaps["% Turnout"]
-
+            this.UIStore.geoJSONLayer = this.UIStore.baseMaps["% Turnout"]
         },
-        onLayerChange(e) {
+        onBaseLayerChange(e) {
             this.UIStore.geoJSONLayer.resetStyle()
-            this.UIStore.county = null
             this.UIStore.geoJSONLayer = e.layer
-        },
-        sharedLayerOpts(func) {
-            return {
-                valueProperty: func,
-                scale: ['#222b3d', '#67ff4f'], 
-                steps: 5, 
-                mode: 'e', 
-                style: {
-                    color: 'black', 
-                    weight: 2,
-                    fillOpacity: 0.8
-                },
-                onEachFeature: (feature, layer) => {
-                    layer.on(
-                        'click',
-                        () => {
-                            this.UIStore.updateStyle(layer)
-                            this.UIStore.county = layer
-                        }
-                    )
-                }
-            }
+            this.UIStore.updateCountyFromLayer(this.UIStore.county)
         }
     }
 }
