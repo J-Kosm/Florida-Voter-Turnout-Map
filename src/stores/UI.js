@@ -9,7 +9,7 @@ export const useUIStore = defineStore('UI', {
   getters: {
     countyName: (state) => {
       return state.county.feature.properties.county
-    }
+    },
   },
   actions: {
     updateStyle(clickedCounty) {

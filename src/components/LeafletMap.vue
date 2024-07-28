@@ -42,6 +42,7 @@ export default {
         ...mapStores(useUIStore)
     },
     mounted() {
+        console.log("Mounted: LeafletMap")
         this.init()
     },
 
@@ -62,6 +63,8 @@ export default {
 
         },
         onLayerChange(e) {
+            this.UIStore.geoJSONLayer.resetStyle()
+            this.UIStore.county = null
             this.UIStore.geoJSONLayer = e.layer
         },
         sharedLayerOpts(func) {

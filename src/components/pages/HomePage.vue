@@ -19,6 +19,9 @@ export default {
 
         }
     },
+    mounted() {
+        console.log("Mounted: HomePage")
+    }
 }
 </script>
 
