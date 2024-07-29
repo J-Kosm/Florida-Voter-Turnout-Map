@@ -13,6 +13,7 @@ import L from 'leaflet'
 export default {
     data() {
         return {
+            map: null,
             mapOptions: {
                 zoomControl: false,
                 dragging: false,
@@ -38,20 +39,23 @@ export default {
 
     methods: {
         init() {
-            let map = L.map(
+            this.map = L.map(
                 'map',
                 this.mapOptions
             ).fitBounds(this.mapBounds)
             this.UIStore.updateBaseMaps()
-            this.UIStore.baseMaps["% Turnout"].addTo(map)
+            this.UIStore.baseMaps["% Turnout"].addTo(this.map)
 
-            L.control.layers(this.UIStore.baseMaps, null, {collapsed: false, position: 'topright'}).addTo(map)
+            L.control.layers(this.UIStore.baseMaps, null, {collapsed: false, position: 'topright'}).addTo(this.map)
             
-            map.on('baselayerchange', this.onBaseLayerChange)
+            this.map.on('baselayerchange', this.onBaseLayerChange)
 
+            // radio button isn't clicked, and map style is more opaque than I defined.
+            if (this.UIStore.geoJSONLayer != null) {
+                this.UIStore.baseMaps[this.UIStore.mapStyle].addTo(this.map)
+                return
+            }
             this.UIStore.geoJSONLayer = this.UIStore.baseMaps["% Turnout"]
-
-            
         },
         restoreState() {
             if (this.UIStore.county != null) {
@@ -60,11 +64,14 @@ export default {
                         this.UIStore.selectCounty(item)
                     }
                 })
+                this.UIStore.geoJSONLayer.addTo(this.map)
             }
         },
         onBaseLayerChange(e) {
             this.UIStore.geoJSONLayer.resetStyle()
             this.UIStore.geoJSONLayer = e.layer
+            this.UIStore.mapStyle = e.name
+            console.log(this.UIStore.mapStyle)
             this.UIStore.updateCountyFromLayer(this.UIStore.county)
         }
     }
