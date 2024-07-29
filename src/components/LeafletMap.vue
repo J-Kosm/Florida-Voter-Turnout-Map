@@ -33,6 +33,7 @@ export default {
     mounted() {
         console.log("Mounted: LeafletMap")
         this.init()
+        this.restoreState()
     },
 
     methods: {
@@ -49,6 +50,17 @@ export default {
             map.on('baselayerchange', this.onBaseLayerChange)
 
             this.UIStore.geoJSONLayer = this.UIStore.baseMaps["% Turnout"]
+
+            
+        },
+        restoreState() {
+            if (this.UIStore.county != null) {
+                this.UIStore.geoJSONLayer.eachLayer(item => {
+                    if (this.UIStore.countyName == item.feature.properties.county) {
+                        this.UIStore.selectCounty(item)
+                    }
+                })
+            }
         },
         onBaseLayerChange(e) {
             this.UIStore.geoJSONLayer.resetStyle()

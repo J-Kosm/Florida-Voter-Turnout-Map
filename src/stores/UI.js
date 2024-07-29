@@ -26,6 +26,29 @@ export const useUIStore = defineStore('UI', {
     countyName: (state) => {
       return state.county.feature.properties.county
     },
+    officialTurnout: (state) => {
+      return state.county.feature.properties.turnout
+    },
+    registeredVoters: (state) => {
+      return state.county.feature.properties.voterReg
+    },
+    totalPopulation: (state) => {
+      return state.county.feature.properties.totalPop
+    },
+    youthPopulation: (state) => {
+      return state.county.feature.properties.youthPop
+    },
+    elderPopulation: (state) => {
+      return state.county.feature.properties.elderPop
+    },
+
+
+    votingEligiblePopulation() {
+      return this.totalPopulation - this.youthPopulation
+    },
+/*     officialTurnoutPercentage: (state) => {
+      return
+    }, */
   },
   actions: {
     updateBaseMaps() {
@@ -60,9 +83,10 @@ export const useUIStore = defineStore('UI', {
         }
     },
     updateCounty(clickedCounty) {
+      
       // Do nothing if same county was clicked
-      if (this.county != null && (this.countyName == clickedCounty.feature.properties.county)) {
-        // console.log("same county clicked")
+      if (this.county != null && (this.county == clickedCounty)) {
+        console.log("same county selected")
         return
       }
       // de-select previous county 
@@ -106,3 +130,5 @@ export const useUIStore = defineStore('UI', {
     }
   }
 })
+
+

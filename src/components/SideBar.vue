@@ -29,8 +29,8 @@
             id="county-select"
             @change="onMenuItemClicked"
         >
-            <option value="">{{ UIStore.countyName }}</option>
-            <option v-for="c in UIStore.countyNames" :key="c" :value="c">{{ c }}</option>
+            <option value="" selected="true">{{ UIStore.county.feature.properties.county }}</option>
+            <option v-for="c in UIStore.geoJSONLayer.getLayers()" :key="c" :value="c.feature.properties.county">{{ c.feature.properties.county }}</option>
         </select>
         <br>
         <p>
@@ -39,12 +39,15 @@
         </p>
     </div>
 
+    <table id="sidebar-results">
+    </table>
 </div>
 </template>
 
 <script>
 import { mapStores } from 'pinia';
 import { useUIStore } from '@/stores/UI';
+
 
 export default {
     data() {
@@ -56,22 +59,31 @@ export default {
         ...mapStores(useUIStore)
     },
     watch: {
-        
+        'UIStore.county': {
+            handler() {
+                this.generateTable();
+            },
+            flush: 'post'
+        },
     },
     mounted() {
         console.log("Mounted: SideBar")
-        // this.UIStore.initSideBar()
-        if (this.UIStore.countyNames) {
-            return
-        }
-
-        let x = []
-        this.UIStore.geoJSONLayer.eachLayer(function (layer) {
-            x.push(layer.feature.properties.county)
-        })
-        this.UIStore.countyNames = x
+        this.init()
+        this.restoreState()
     },
     methods: {
+        init() {
+            let x = []
+            this.UIStore.geoJSONLayer.eachLayer(function (layer) {
+                x.push(layer.feature.properties.county)
+            })
+            this.UIStore.countyNames = x
+        },
+        restoreState() {
+            if (this.UIStore.county != null) {
+            this.generateTable()
+        }
+        },
         onMenuItemClicked(e) {
             this.UIStore.geoJSONLayer.eachLayer(item => {
                 if (e.target.value == item.feature.properties.county) {
@@ -80,7 +92,43 @@ export default {
             })
         },
         generateTable() {
+            const tableLabels = [
+                'Official Turnout:',
+                'Total Population:',
+                'Youth Population:',
+                'Elder Population:'
+            ]
+            let tableData = [
+                this.formatWithCommas(this.UIStore.officialTurnout),
+                this.formatWithCommas(this.UIStore.totalPopulation),
+                this.formatWithCommas(this.UIStore.youthPopulation),
+                this.formatWithCommas(this.UIStore.elderPopulation)
+            ]
 
+            const table = document.getElementById('sidebar-results');
+
+            while (table.hasChildNodes()) {
+                table.removeChild(table.firstChild);
+            }
+
+            tableLabels.forEach((label, i) => {
+                const row = document.createElement('tr');
+                const text = document.createElement('td');
+                const data = document.createElement('td');
+                row.id = "resultsRow";
+                text.className = 'table-text';
+                data.className = 'table-data';
+
+                text.innerText = label;
+                data.innerText = tableData[i];
+
+                row.appendChild(text);
+                row.appendChild(data);
+                table.appendChild(row);
+            })
+        },
+        formatWithCommas(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         }
     },
 }
