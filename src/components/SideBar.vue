@@ -28,8 +28,8 @@
             name="" 
             id="county-select"
             @change="onMenuItemClicked"
+            :value="UIStore.countyName"
         >
-            <option value="" selected="true">{{ UIStore.county.feature.properties.county }}</option>
             <option v-for="c in UIStore.geoJSONLayer.getLayers()" :key="c" :value="c.feature.properties.county">{{ c.feature.properties.county }}</option>
         </select>
         <br>
@@ -72,7 +72,7 @@ export default {
         this.restoreState()
     },
     methods: {
-        init() {
+        init() { // really only needs to ever happen once
             let x = []
             this.UIStore.geoJSONLayer.eachLayer(function (layer) {
                 x.push(layer.feature.properties.county)
@@ -91,7 +91,8 @@ export default {
                 }
             })
         },
-        generateTable() {
+        generateTable() { // would be better if this accepted the chosen map style as an argument and prioritized that specific information somehow.
+            
             const tableLabels = [
                 'Official Turnout:',
                 'Total Population:',
@@ -147,5 +148,32 @@ export default {
     border-radius: 50px;
     border: 2px solid black;
     padding: 15px 25px;
+}
+.sidebar-title {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.sidebar-title h1 {
+    font-size: clamp(12px, 1.5vw, 30px);
+}
+.sidebar-title select {
+    padding-inline: 12px;
+}
+.sidebar-title p, select {
+    font-size: clamp(12px, 1vw, 18px);
+}
+
+#sidebar-results {
+    justify-content: space-evenly;
+    width: 100%;
+    font-size: clamp(12px, 1.25vw, 18px);
+    border-top: 2px solid black;
+    padding: 25px 50px
+}
+#sidebar-results td:first-child {
+    font-weight: bold;
+}
+#sidebar-results td:last-child {
+    float: right;
 }
 </style>

@@ -43,15 +43,19 @@ export const useUIStore = defineStore('UI', {
     },
 
 
-    votingEligiblePopulation() {
+    votingAgePopulation() {
       return this.totalPopulation - this.youthPopulation
     },
-/*     officialTurnoutPercentage: (state) => {
+    
+
+/*  
+    officialTurnoutPercentage: (state) => {
       return
-    }, */
+    },
+*/
   },
   actions: {
-    updateBaseMaps() {
+    updateBaseMaps() { // this is more like 'setBaseMaps()', as nothing is being passed in to update.
       this.baseMaps = {
         "% Turnout": L.choropleth(geoData, this.sharedLayerOpts((feature) => {
             return ( feature.properties.turnout / feature.properties.voterReg) * 100
@@ -60,8 +64,9 @@ export const useUIStore = defineStore('UI', {
             return feature.properties.totalPop
         }))
       }
+      
     },
-    sharedLayerOpts(func) {
+    sharedLayerOpts(func) { // probably doesn't have to exist like this
         return {
             valueProperty: func,
             scale: ['#222b3d', '#67ff4f'], 
@@ -82,7 +87,7 @@ export const useUIStore = defineStore('UI', {
             }
         }
     },
-    updateCounty(clickedCounty) {
+    updateCounty(clickedCounty) { // map style changes should be moved to map component function?
       
       // Do nothing if same county was clicked
       if (this.county != null && (this.county == clickedCounty)) {
@@ -103,7 +108,7 @@ export const useUIStore = defineStore('UI', {
       })
       this.county.bringToFront()
     },
-    selectCounty(clickedCounty) {
+    selectCounty(clickedCounty) { // should be moved to map component?
       // select new county
       this.county = clickedCounty
       this.county.setStyle({
@@ -113,7 +118,7 @@ export const useUIStore = defineStore('UI', {
       })
       this.county.bringToFront()
     },
-    updateCountyFromLayer(county) {
+    updateCountyFromLayer(county) { // reconsider
       this.geoJSONLayer.eachLayer( (layer) => {
         if (layer.feature.properties.county == county.feature.properties.county) {
           // select new county
