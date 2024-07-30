@@ -1,7 +1,8 @@
 <template>
 <button class="button" type="button" @click="$emit('navButtonClicked', path)">
     <img :src="imgSrc" alt="">
-    {{ text }}
+    <span>{{ text }}</span>
+    
 </button>
 </template>
 
@@ -48,9 +49,10 @@ export default {
 
     color: black;
     border: none;
-    border-radius: 18px;
+    border-radius: 8px;
     background-color: antiquewhite;
     font-size: clamp(12px, 1.5vw, 25px);
+    margin: 0px 2px 0px;
 }
 .button:hover {
     background-color: burlywood;
@@ -59,6 +61,11 @@ export default {
     width: 20px;
     height: 20px;
     padding-right: 5px;
+}
+@media only screen and (max-width: 600px) {
+    .button span {
+        display: none;
+    }
 }
 
 </style>

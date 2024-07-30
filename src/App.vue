@@ -33,6 +33,8 @@ export default {
 #layout {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  overflow-y: auto;
+  min-height: 100dvh;
+
 }
 </style>

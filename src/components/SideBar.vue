@@ -94,13 +94,27 @@ export default {
         generateTable() { // would be better if this accepted the chosen map style as an argument and prioritized that specific information somehow.
             
             const tableLabels = [
+                // Official Turnout
+                'Official Turnout %:',
                 'Official Turnout:',
+                'Registered Voters:',
+                // Adjusted Turnout
+                'Adjusted Turnout %:',
+                'Voting Age Population:',
+                // Population
                 'Total Population:',
                 'Youth Population:',
                 'Elder Population:'
             ]
             let tableData = [
+                // Official Turnout
+                this.UIStore.turnoutPercentage  + " %",
+                this.UIStore.registeredVoters,
                 this.formatWithCommas(this.UIStore.officialTurnout),
+                // Adjusted Turnout
+                this.UIStore.adjustedTurnoutPercentage  + " %",
+                this.formatWithCommas(this.UIStore.votingAgePopulation),
+                // Population
                 this.formatWithCommas(this.UIStore.totalPopulation),
                 this.formatWithCommas(this.UIStore.youthPopulation),
                 this.formatWithCommas(this.UIStore.elderPopulation)
@@ -168,7 +182,7 @@ export default {
     width: 100%;
     font-size: clamp(12px, 1.25vw, 18px);
     border-top: 2px solid black;
-    padding: 25px 50px
+    padding: 20px 25px
 }
 #sidebar-results td:first-child {
     font-weight: bold;

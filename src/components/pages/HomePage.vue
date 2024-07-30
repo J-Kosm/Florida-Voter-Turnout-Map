@@ -29,11 +29,12 @@ export default {
 #content {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 1;
     justify-content: center;
+    gap: 25px;
 
     box-sizing: border-box;
-    gap: 20px;
-    flex: 1 0 auto;
     padding: 2em;
 }
 .leaflet-map {

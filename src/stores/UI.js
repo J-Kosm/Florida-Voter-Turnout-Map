@@ -23,15 +23,28 @@ export const useUIStore = defineStore('UI', {
 
 
   getters: {
+    // County Details
     countyName: (state) => {
       return state.county.feature.properties.county
     },
+    // Official Turnout
     officialTurnout: (state) => {
       return state.county.feature.properties.turnout
     },
     registeredVoters: (state) => {
       return state.county.feature.properties.voterReg
     },
+    turnoutPercentage() {
+      return ((this.officialTurnout / this.registeredVoters) * 100).toFixed(1)
+    },
+    // Adjusted Turnout
+    adjustedTurnoutPercentage() {
+      return ((this.officialTurnout / this.votingAgePopulation) * 100).toFixed(1)
+    },
+    votingAgePopulation() {
+      return this.totalPopulation - this.youthPopulation
+    },
+    // Population
     totalPopulation: (state) => {
       return state.county.feature.properties.totalPop
     },
@@ -40,11 +53,6 @@ export const useUIStore = defineStore('UI', {
     },
     elderPopulation: (state) => {
       return state.county.feature.properties.elderPop
-    },
-
-
-    votingAgePopulation() {
-      return this.totalPopulation - this.youthPopulation
     },
     
 
@@ -70,7 +78,7 @@ export const useUIStore = defineStore('UI', {
         return {
             valueProperty: func,
             scale: ['#222b3d', '#67ff4f'], 
-            steps: 5, 
+            steps: 50, 
             mode: 'e', 
             style: {
                 color: 'black', 
@@ -101,8 +109,6 @@ export const useUIStore = defineStore('UI', {
       
       // select new county
       this.county = clickedCounty
-      console.log(this.county)
-      console.log(this.geoJSONLayer)
       this.county.setStyle({
         weight: 3,
         color: 'white',
