@@ -52,6 +52,9 @@ export default {
 
             // radio button isn't clicked, and map style is more opaque than I defined.
             if (this.UIStore.geoJSONLayer != null) {
+                this.UIStore.geoJSONLayer.resetStyle()
+                console.log("NewLayer: ")
+                console.log(this.UIStore.baseMaps[this.UIStore.mapStyle])
                 this.UIStore.baseMaps[this.UIStore.mapStyle].addTo(this.map)
                 return
             }

@@ -11,6 +11,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "chroma-js": "^2.4.2",
     "leaflet": "^1.9.4",
     "leaflet-choropleth": "^1.1.4",
     "pinia": "^2.1.7",

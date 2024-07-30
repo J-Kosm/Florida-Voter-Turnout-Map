@@ -101,6 +101,8 @@ export const useUIStore = defineStore('UI', {
       
       // select new county
       this.county = clickedCounty
+      console.log(this.county)
+      console.log(this.geoJSONLayer)
       this.county.setStyle({
         weight: 3,
         color: 'white',
@@ -121,8 +123,8 @@ export const useUIStore = defineStore('UI', {
     updateCountyFromLayer(county) { // reconsider
       this.geoJSONLayer.eachLayer( (layer) => {
         if (layer.feature.properties.county == county.feature.properties.county) {
+          console.log(layer.feature.properties.county + " is the same as " + county.feature.properties.county)
           // select new county
-          // dropdown menu not updating properly
           this.county = layer
           this.county.setStyle({
             weight: 3,
