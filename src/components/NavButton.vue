@@ -1,5 +1,5 @@
 <template>
-<button class="button" type="button" @click="$emit('navButtonClicked', path)">
+<button data-test="button" class="button" type="button" @click="$emit('navButtonClicked', path)">
     <img :src="imgSrc" alt="">
     <span>{{ text }}</span>
     

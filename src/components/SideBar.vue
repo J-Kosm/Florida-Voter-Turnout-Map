@@ -92,33 +92,22 @@ export default {
             })
         },
         generateTable() { // would be better if this accepted the chosen map style as an argument and prioritized that specific information somehow.
-            
-            const tableLabels = [
-                // Official Turnout
-                'Official Turnout %:',
-                'Official Turnout:',
-                'Registered Voters:',
-                // Adjusted Turnout
-                'Adjusted Turnout %:',
-                'Voting Age Population:',
-                // Population
-                'Total Population:',
-                'Youth Population:',
-                'Elder Population:'
-            ]
-            let tableData = [
-                // Official Turnout
-                this.UIStore.turnoutPercentage  + " %",
-                this.UIStore.registeredVoters,
-                this.formatWithCommas(this.UIStore.officialTurnout),
-                // Adjusted Turnout
-                this.UIStore.adjustedTurnoutPercentage  + " %",
-                this.formatWithCommas(this.UIStore.votingAgePopulation),
-                // Population
-                this.formatWithCommas(this.UIStore.totalPopulation),
-                this.formatWithCommas(this.UIStore.youthPopulation),
-                this.formatWithCommas(this.UIStore.elderPopulation)
-            ]
+            const tableData = {
+                'Official Turnout': {
+                    'Official %:': this.UIStore.turnoutPercentage  + " %",
+                    'Official Turnout:': this.formatWithCommas(this.UIStore.officialTurnout),
+                    'Registered Voters:': this.formatWithCommas(this.UIStore.registeredVoters),
+                },
+                'Adjusted Turnout': {
+                    'Adjusted %:': this.UIStore.adjustedTurnoutPercentage  + " %",
+                },
+                'Demographics': {
+                    'Total Population:': this.formatWithCommas(this.UIStore.totalPopulation),
+                    'Voting Age Population:': this.formatWithCommas(this.UIStore.votingAgePopulation),
+                    '17 and younger:': this.formatWithCommas(this.UIStore.youthPopulation),
+                    '65 and older:': this.formatWithCommas(this.UIStore.elderPopulation),
+                }
+            }
 
             const table = document.getElementById('sidebar-results');
 
@@ -126,21 +115,28 @@ export default {
                 table.removeChild(table.firstChild);
             }
 
-            tableLabels.forEach((label, i) => {
-                const row = document.createElement('tr');
-                const text = document.createElement('td');
-                const data = document.createElement('td');
-                row.id = "resultsRow";
-                text.className = 'table-text';
-                data.className = 'table-data';
+            for (const [key, value] of Object.entries(tableData)) {
+                const subheadingRow = document.createElement('tr')
+                const subheadingData = document.createElement('td')
+                subheadingData.innerText = key
+                subheadingData.colSpan = 2
+                subheadingData.className = "subheading"
+                subheadingRow.appendChild(subheadingData)
+                table.appendChild(subheadingRow)
 
-                text.innerText = label;
-                data.innerText = tableData[i];
+                for (const [key, innerValue] of Object.entries(value)) {
+                    const row = document.createElement('tr');
+                    const text = document.createElement('td');
+                    const data = document.createElement('td');
 
-                row.appendChild(text);
-                row.appendChild(data);
-                table.appendChild(row);
-            })
+                    text.innerText = key
+                    data.innerText = innerValue
+
+                    row.appendChild(text);
+                    row.appendChild(data);
+                    table.appendChild(row);
+                }
+            }
         },
         formatWithCommas(num) {
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -178,16 +174,18 @@ export default {
 }
 
 #sidebar-results {
+
     justify-content: space-evenly;
     width: 100%;
     font-size: clamp(12px, 1.25vw, 18px);
     border-top: 2px solid black;
     padding: 20px 25px
 }
-#sidebar-results td:first-child {
+#sidebar-results :deep(.subheading) {
     font-weight: bold;
+    text-align: center;
+    padding-top: 10px;
 }
-#sidebar-results td:last-child {
-    float: right;
-}
+
+
 </style>

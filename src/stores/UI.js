@@ -54,19 +54,19 @@ export const useUIStore = defineStore('UI', {
     elderPopulation: (state) => {
       return state.county.feature.properties.elderPop
     },
-    
-
-/*  
-    officialTurnoutPercentage: (state) => {
-      return
-    },
-*/
   },
   actions: {
     updateBaseMaps() { // this is more like 'setBaseMaps()', as nothing is being passed in to update.
       this.baseMaps = {
-        "% Turnout": L.choropleth(geoData, this.sharedLayerOpts((feature) => {
-            return ( feature.properties.turnout / feature.properties.voterReg) * 100
+        "Official Turnout %": L.choropleth(geoData, this.sharedLayerOpts((feature) => {
+            return (feature.properties.turnout / feature.properties.voterReg) * 100
+        })),
+        "Adjusted Turnout %": L.choropleth(geoData, this.sharedLayerOpts((feature) => {
+            return ((feature.properties.turnout / (feature.properties.totalPop - feature.properties.youthPop)) * 100)
+            // 'greatest change'
+            // Effectively pointing out which counties have the highest amounts of unregistered but eligible adults
+            // ((feature.properties.turnout / feature.properties.voterReg) * 100 - (feature.properties.turnout / (feature.properties.totalPop - feature.properties.youthPop)) * 100)
+
         })),
         "Total Population": L.choropleth(geoData, this.sharedLayerOpts((feature) => {
             return feature.properties.totalPop
@@ -78,7 +78,7 @@ export const useUIStore = defineStore('UI', {
         return {
             valueProperty: func,
             scale: ['#222b3d', '#67ff4f'], 
-            steps: 50, 
+            steps: 5, 
             mode: 'e', 
             style: {
                 color: 'black', 
@@ -128,8 +128,10 @@ export const useUIStore = defineStore('UI', {
     },
     updateCountyFromLayer(county) { // reconsider
       this.geoJSONLayer.eachLayer( (layer) => {
+        if (this.county == null) {
+          return
+        }
         if (layer.feature.properties.county == county.feature.properties.county) {
-          console.log(layer.feature.properties.county + " is the same as " + county.feature.properties.county)
           // select new county
           this.county = layer
           this.county.setStyle({

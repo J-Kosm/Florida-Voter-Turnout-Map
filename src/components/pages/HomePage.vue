@@ -14,14 +14,6 @@ export default {
         LeafletMap,
         SideBar
     },
-    data() {
-        return {
-
-        }
-    },
-    mounted() {
-        console.log("Mounted: HomePage")
-    }
 }
 </script>
 

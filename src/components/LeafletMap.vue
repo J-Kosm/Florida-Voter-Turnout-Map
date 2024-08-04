@@ -1,6 +1,6 @@
 <template>
 <div id="map-container">
-    <div id='map'></div>
+    <div ref='map' id='map'></div>
     <MapLegend></MapLegend>
 </div>
 </template>
@@ -47,12 +47,14 @@ export default {
     methods: {
         init() {
             this.map = L.map(
-                'map',
+                this.$refs.map,
                 this.mapOptions
             ).fitBounds(this.mapBounds)
             this.UIStore.updateBaseMaps()
-            this.UIStore.baseMaps["% Turnout"].addTo(this.map)
-            this.UIStore.mapStyle = "% Turnout"
+            this.UIStore.baseMaps["Official Turnout %"].addTo(this.map)
+            if (this.UIStore.mapStyle == null) {
+                this.UIStore.mapStyle = "Official Turnout %"
+            }
 
             L.control.layers(this.UIStore.baseMaps, null, {collapsed: false, position: 'topright'}).addTo(this.map)
             
@@ -64,7 +66,7 @@ export default {
                 this.UIStore.baseMaps[this.UIStore.mapStyle].addTo(this.map)
                 return
             }
-            this.UIStore.geoJSONLayer = this.UIStore.baseMaps["% Turnout"]
+            this.UIStore.geoJSONLayer = this.UIStore.baseMaps["Official Turnout %"]
         },
         restoreState() {
             if (this.UIStore.county != null) {
@@ -80,7 +82,6 @@ export default {
             this.UIStore.geoJSONLayer.resetStyle()
             this.UIStore.geoJSONLayer = e.layer
             this.UIStore.mapStyle = e.name
-            console.log(this.UIStore.mapStyle)
             this.UIStore.updateCountyFromLayer(this.UIStore.county)
         }
     }
