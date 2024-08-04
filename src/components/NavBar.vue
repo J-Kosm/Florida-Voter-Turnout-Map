@@ -1,8 +1,8 @@
 <template>
 <div id="navbar">
     <div id="button-container">
-        <NavButton :img-src="homeButtonImg" text="Home" path="/" @navButtonClicked="onNavButtonClicked"></NavButton>
-        <NavButton :img-src="aboutButtonImg" text="About" path="/about" @navButtonClicked="onNavButtonClicked"></NavButton>
+        <NavButton :img-src="homeButtonImg" text="Home" path="/Florida-Voter-Turnout-Map/" @navButtonClicked="onNavButtonClicked"></NavButton>
+        <NavButton :img-src="aboutButtonImg" text="About" path="/Florida-Voter-Turnout-Map/about" @navButtonClicked="onNavButtonClicked"></NavButton>
     </div>
 
     <div id="title">
@@ -36,7 +36,6 @@ export default {
     },
     methods: {
         onNavButtonClicked(i) {
-            console.log("Path: " + i)
             this.$router.push(i)
         }
     }

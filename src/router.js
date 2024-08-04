@@ -5,8 +5,8 @@ const AboutPage = () => import('./components/pages/AboutPage.vue')
 const InvalidPage = () => import('./components/pages/InvalidPage.vue')
 
 const routes = [
-    { path: '/', name: 'Home', component: HomePage },
-    { path: '/about', name: 'About', component: AboutPage },
+    { path: '/Florida-Voter-Turnout-Map/', name: 'Home', component: HomePage },
+    { path: '/Florida-Voter-Turnout-Map/about', name: 'About', component: AboutPage },
     { path: '/:pathMatch(.*)*', name: 'InvalidPage', component: InvalidPage }
 ]
 

@@ -1,6 +1,7 @@
 {
   "name": "florida-map-visualization",
   "version": "0.0.0",
+  "homepage": "https://j-kosm.github.io/Florida-Voter-Turnout-Map/",
   "private": true,
   "type": "module",
   "scripts": {

@@ -39,7 +39,6 @@ export default {
         ...mapStores(useUIStore)
     },
     mounted() {
-        console.log("Mounted: LeafletMap")
         this.init()
         this.restoreState()
     },
