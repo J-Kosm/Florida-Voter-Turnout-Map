@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as a}from"./index-CMUkP3z4.js";const o={data(){return{}}};function n(c,r,s,_,d,l){return t(),a("div",null," Invalid Page! Please click on the Home button to return to the map. ")}const i=e(o,[["render",n],["__scopeId","data-v-957ec7f8"]]);export{i as default};
