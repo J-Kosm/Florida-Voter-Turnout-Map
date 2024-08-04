@@ -1,19 +1,15 @@
 <template>
 <div id="navbar">
-<!-- NavBar Container -->
     <div id="button-container">
-        <!-- Buttons -->
         <NavButton :img-src="homeButtonImg" text="Home" path="/" @navButtonClicked="onNavButtonClicked"></NavButton>
         <NavButton :img-src="aboutButtonImg" text="About" path="/about" @navButtonClicked="onNavButtonClicked"></NavButton>
     </div>
 
     <div id="title">
-        <!-- Title -->
          {{ titleText }}
     </div>
 
     <div id="attribution">
-        <!-- Attrib -->
         UIcons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
     </div>
 
@@ -60,13 +56,11 @@ export default {
 #navbar * {
     padding: 4px;
 }
-
 #button-container {
     display: flex;
     max-height: 67px;
     justify-content: center;
 }
-
 #title {
     text-align: center;
     max-height: 67px;
@@ -74,8 +68,6 @@ export default {
     font-size: clamp(12px, 1.5vw, 30px);
     margin: 0;
 }
-
-
 #attribution {
     align-self: center;
     justify-self: center;

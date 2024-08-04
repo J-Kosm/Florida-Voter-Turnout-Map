@@ -48,7 +48,6 @@
 import { mapStores } from 'pinia';
 import { useUIStore } from '@/stores/UI';
 
-
 export default {
     data() {
         return {
@@ -72,7 +71,7 @@ export default {
         this.restoreState()
     },
     methods: {
-        init() { // really only needs to ever happen once
+        init() {
             let x = []
             this.UIStore.geoJSONLayer.eachLayer(function (layer) {
                 x.push(layer.feature.properties.county)
@@ -91,7 +90,7 @@ export default {
                 }
             })
         },
-        generateTable() { // would be better if this accepted the chosen map style as an argument and prioritized that specific information somehow.
+        generateTable() {
             const tableData = {
                 'Official Turnout': {
                     'Official %:': this.UIStore.turnoutPercentage  + " %",
@@ -172,7 +171,6 @@ export default {
 .sidebar-title p, select {
     font-size: clamp(12px, 1vw, 18px);
 }
-
 #sidebar-results {
 
     justify-content: space-evenly;
